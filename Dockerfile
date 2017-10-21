@@ -1,7 +1,7 @@
 FROM golang:1.9-alpine as build
 
 LABEL name="wppier\confd"
-LABEL version="0.0.1"
+LABEL version="0.0.2"
 
 RUN apk add --no-cache make git
 
@@ -22,4 +22,3 @@ RUN git checkout $APP_VERSION && \
 FROM alpine:latest
 
 COPY --from=build /app/bin/confd /usr/local/bin/confd
-
