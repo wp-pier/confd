@@ -11,16 +11,16 @@ RUN go get $GIT_URL && \
 
 WORKDIR /app
 
-RUN git checkout $APP_VERSION && \
-    VERSION=`egrep -o '[0-9]+\.[0-9a-z.\-]+' version.go`; \
-    GIT_SHA=`git rev-parse --short HEAD`; \
-    GOARCH=amd64; \
-    CGO_ENABLED=0; \
-    go build -ldflags="-s -w -X main.GitSHA=${GIT_SHA}" -o bin/confd;
+RUN git checkout $APP_VERSION                             &&\
+    VERSION=$(egrep -o '[0-9]+\.[0-9a-z.\-]+' version.go) &&\
+    GIT_SHA=$(git rev-parse --short HEAD)                 &&\
+    GOARCH=amd64                                          &&\
+    CGO_ENABLED=0                                         &&\
+    go build -ldflags="-s -w -X main.GitSHA=${GIT_SHA}" -o bin/confd
 
-FROM alpine:latest
+FROM alpine:3.6
 
 LABEL name="wppier/confd"
-LABEL version="0.0.4"
+LABEL version="latest"
 
 COPY --from=build /app/bin/confd /usr/local/bin/confd
